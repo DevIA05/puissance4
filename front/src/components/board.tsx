@@ -1,11 +1,6 @@
 import { For, createSignal } from "solid-js"
-import BoardItem from "./boardItem"
+import BoardItem, { PieceEnum } from "./boardItem"
 
-export enum PieceEnum {
-    red="red",
-    yellow="yellow",
-    empty="white"
-}
 export type boardStateDictType = { [key: number]: PieceEnum[] }
 
 const rows = [0, 1, 2, 3, 4, 5]

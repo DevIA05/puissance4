@@ -1,5 +1,19 @@
 import { createEffect, createSignal, on } from "solid-js"
-import { PieceEnum, boardState, setBoardState } from "./board"
+import { boardState, setBoardState } from "./board"
+
+export enum PieceEnum {
+    red="red",
+    yellow="yellow",
+    empty="white"
+}
+
+const [turn, setTurn] = createSignal(PieceEnum.red)
+
+function switchTurn() {
+    setTurn((prev) =>
+        prev == PieceEnum.red ? PieceEnum.yellow : PieceEnum.red
+    )
+}
 
 type BoardItemProps = {
     row: number,
@@ -7,22 +21,18 @@ type BoardItemProps = {
 }
 
 function onclick(row:number, column: number) {
-    console.log("onclick")
     setBoardState((prev) => {
         const newDict = {...prev}
-        newDict[row][column] = PieceEnum.red
+        newDict[row][column] = turn()
         return newDict
     })
-    console.log(boardState())
+    switchTurn()
 }
 
 export default function (props: BoardItemProps) {
     const [fillColor, setFillColor] = createSignal<PieceEnum>(PieceEnum.empty)
     
     createEffect(on(boardState,()=> {
-        console.log("createEffect")
-        console.log(boardState()[props.row][props.column]);
-        
         setFillColor(boardState()[props.row][props.column])
     }))
     return (
