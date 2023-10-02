@@ -21,20 +21,22 @@ type BoardItemProps = {
 }
 
 function onclick(row:number, column: number) {
-    setBoardState((prev) => {
-        const newDict = {...prev}
-        newDict[row][column] = turn()
-        return newDict
-    })
-    switchTurn()
+    if (row == 5 || boardState()[row + 1][column] != PieceEnum.empty) {
+        setBoardState((prev) => {
+            const newDict = {...prev}
+            newDict[row][column] = turn()
+            return newDict
+        })
+        switchTurn()
+    }
 }
 
 export default function (props: BoardItemProps) {
     const [fillColor, setFillColor] = createSignal<PieceEnum>(PieceEnum.empty)
     
-    createEffect(on(boardState,()=> {
+    createEffect(()=> {
         setFillColor(boardState()[props.row][props.column])
-    }))
+    })
     return (
         <svg height="100" width="100" onClick={() => onclick(props.row, props.column)}>
             <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill={fillColor()} />
