@@ -1,5 +1,6 @@
 import type { JSXElement } from 'solid-js';
+import Navbar from './components/navbar';
 
 export default function (): JSXElement {
-  return (<div class="text-3xl font-bold underline">Yo world</div>);
+  return (<Navbar />)
 };
