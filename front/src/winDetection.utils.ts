@@ -1,6 +1,8 @@
 import { boardState, boardStateDictType, columns, rows } from "./components/board";
 import { GameStepEnum, PieceEnum, gameStep, setGameStep, turn } from "./components/gameContext";
 
+// TODO: Delete useless: checkLeft, checkDown, checkUpRight, checkDownRight ??
+
 function checkLeft(row: number, column: number, boardStateDict: boardStateDictType) {
     if (column < 3) return;
 
