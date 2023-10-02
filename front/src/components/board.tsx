@@ -1,6 +1,6 @@
 import { For, createSignal } from "solid-js"
 import BoardItem from "./boardItem"
-import { PieceEnum } from "./gameContext"
+import { PieceEnum, turn } from "./gameContext"
 
 export type boardStateDictType = { [key: number]: PieceEnum[] }
 
@@ -14,7 +14,15 @@ for (const row of rows) {
     boardStateDict[row] = [PieceEnum.empty,PieceEnum.empty,PieceEnum.empty,PieceEnum.empty,PieceEnum.empty,PieceEnum.empty,PieceEnum.empty]
 }
 
-export const [boardState, setBoardState] = createSignal(boardStateDict) 
+export const [boardState, setBoardState] = createSignal(boardStateDict)
+
+export function updateBoard(row:number, column: number) {
+    setBoardState((prev) => {
+        const newDict = {...prev}
+        newDict[row][column] = turn()
+        return newDict
+    })
+}
 
 export default function () {
     return (
