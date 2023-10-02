@@ -16,15 +16,18 @@ for (const row of rows) {
 export const [boardState, setBoardState] = createSignal(boardStateDict) 
 
 export default function () {
-    return(
+    return (
         <div class="flex justify-center mt-5">
             <div class="grid grid-cols-7 bg-blue-800">
                 <For each={rows}>{(row: number) => {
-                    return (<For each={columns}>{(column)=> {
+                    return (
+                        <For each={columns}>{(column)=> {
                             return(<BoardItem row={row} column={column}/>)
-                        }}</For>)
-
-                }}</For>
+                            }}
+                        </For>
+                    )}}
+                </For>
             </div>
-        </div>)
+        </div>
+    )
 }
