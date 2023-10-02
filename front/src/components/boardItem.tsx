@@ -1,4 +1,4 @@
-import { createEffect, createSignal, on } from "solid-js"
+import { createEffect, createSignal } from "solid-js"
 import { boardState, setBoardState } from "./board"
 import { PieceEnum, setTurn, turn } from "./navbar"
 
