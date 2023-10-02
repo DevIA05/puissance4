@@ -42,7 +42,7 @@ export default function (props: BoardItemProps) {
     })
     return (
         <svg height="100" width="100" onClick={() => onclick(props.row, props.column)}>
-            <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill={fillColor()} />
+            <circle cx="50" cy="50" r="40" stroke="black" stroke-width="2" fill={fillColor()} />
         </svg>
     )
 }

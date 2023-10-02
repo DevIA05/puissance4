@@ -7,7 +7,7 @@ export default function () {
     return(
         <div class="w-full h-36 bg-slate-700">
             <h1 class="text-center font-extrabold text-[75px] select-none">Connect 4</h1>
-            <p class="text-white text-xl">Turn:</p>
+            <p class="text-white text-xl select-none">Turn:</p>
             <div class="w-16 h-8" style={`background-color: ${color()}`}></div>
         </div>
     )

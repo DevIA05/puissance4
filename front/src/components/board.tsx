@@ -27,7 +27,7 @@ export function updateBoard(row:number, column: number) {
 export default function () {
     return (
         <div class="flex justify-center mt-5">
-            <div class="grid grid-cols-7 bg-blue-800">
+            <div class="grid grid-cols-7 bg-blue-800 border-4 border-r-black border-l-black border-b-black border-t-blue-900">
                 <For each={rows}>{(row: number) => {
                     return (
                         <For each={columns}>{(column)=> {
