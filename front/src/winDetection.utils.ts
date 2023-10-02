@@ -110,8 +110,6 @@ export function checkWinGlobal() {
             if (result) {
                 console.log(turn() + "wins");
                 return true;
-                // setGameStep(GameStepEnum.win)
-                // break;
             }
         }
     }
@@ -124,7 +122,6 @@ export function checkNull() {
         if (emptyPos.length == 0) {
             console.log("match null")
             return true
-            // setGameStep(GameStepEnum.null)
         } else return false;
     }
 }
