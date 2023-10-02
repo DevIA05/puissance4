@@ -4,8 +4,8 @@ import { PieceEnum } from "./navbar"
 
 export type boardStateDictType = { [key: number]: PieceEnum[] }
 
-const rows = [0, 1, 2, 3, 4, 5]
-const columns = [0, 1, 2, 3, 4, 5, 6]
+export const rows = [0, 1, 2, 3, 4, 5]
+export const columns = [0, 1, 2, 3, 4, 5, 6]
 
 const boardStateDict: boardStateDictType = {}
 

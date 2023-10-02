@@ -1,5 +1,5 @@
 import { createEffect, createSignal } from "solid-js"
-import { boardState, setBoardState } from "./board"
+import { boardState, columns, rows, setBoardState } from "./board"
 import { PieceEnum, setTurn, turn } from "./navbar"
 import { checkWin } from "../utils"
 
@@ -24,8 +24,18 @@ function onclick(row:number, column: number) {
             newDict[row][column] = turn()
             return newDict
         })
+        // TODO: action  quand win ? popup ? bloquer la partie ?
+        // checkWin(row, column, boardState()) ? console.log("win") : console.log("tjrs pas win")
+        for (const row of rows) {
+            for (const column of columns) {
+                const result = checkWin(row, column, boardState())
+                if (result) {
+                    console.log(turn() + "wins");
+                    break;
+                }
+            }
+        }
         switchTurn()
-        checkWin(row, column, boardState()) ? console.log("win") : console.log("tjrs pas win")
     }
 }
 
