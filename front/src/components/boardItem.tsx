@@ -1,6 +1,6 @@
 import { createEffect, createSignal } from "solid-js"
 
-import { GameStepEnum, PieceEnum, setGameStep, switchTurn, turn } from "./gameContext"
+import { GameStepEnum, PieceEnum, gameStep, setGameStep, setTurn, switchTurn, turn } from "./gameContext"
 import { boardState, columns, rows, setBoardState } from "./board"
 
 import { checkWin } from "../utils"
@@ -32,7 +32,19 @@ function onclick(row:number, column: number) {
                 }
             }
         }
-        switchTurn()
+
+        // Check null situations
+        if (gameStep() == GameStepEnum.playing) {
+            const emptyPos = boardState()[0].filter((piece) => piece == PieceEnum.empty)
+            if (emptyPos.length == 0) {
+                console.log("match null")
+                setGameStep(GameStepEnum.null)
+            }
+        }
+
+        if (gameStep() == GameStepEnum.playing) {
+            switchTurn()
+        } else {setTurn(PieceEnum.red)}
     }
 }
 
