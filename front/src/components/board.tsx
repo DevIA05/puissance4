@@ -1,11 +1,34 @@
-import { For } from "solid-js"
+import { For, createSignal } from "solid-js"
+import BoardItem from "./boardItem"
+
+export enum PieceEnum {
+    red="red",
+    yellow="yellow",
+    empty="white"
+}
+export type boardStateDictType = { [key: number]: PieceEnum[] }
+
+const rows = [0, 1, 2, 3, 4, 5]
+const columns = [0, 1, 2, 3, 4, 5, 6]
+
+const boardStateDict: boardStateDictType = {}
+
+for (const row of rows) {
+    boardStateDict[row] = [PieceEnum.empty,PieceEnum.empty,PieceEnum.empty,PieceEnum.empty,PieceEnum.empty,PieceEnum.empty,PieceEnum.empty]
+}
+
+export const [boardState, setBoardState] = createSignal(boardStateDict) 
 
 export default function () {
-    return(<div class="flex justify-center"><div class="grid grid-cols-7">
-    <For each={Array.from(Array(6).keys())}>{(row: Number) => {
-        return (<For each={Array.from(Array(7).keys())}>{(column)=> {
-            return(<div class=" m-14">{String(row) + String(column)}</div>)
-        }}</For>)
+    return(
+        <div class="flex justify-center">
+            <div class="grid grid-cols-7">
+                <For each={rows}>{(row: number) => {
+                    return (<For each={columns}>{(column)=> {
+                            return(<BoardItem row={row} column={column}/>)
+                        }}</For>)
 
-    }}</For></div></div>)
+                }}</For>
+            </div>
+        </div>)
 }
