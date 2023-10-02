@@ -10,7 +10,7 @@ export default function (): JSXElement {
   return (
     <>
       <GameContext>
-        <Header />
+        {/* <Header /> */}
         <Board />
       </GameContext>
     </>
