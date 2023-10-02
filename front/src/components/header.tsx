@@ -1,16 +1,6 @@
-import { createSignal } from "solid-js"
+import { PieceEnum, turn } from "./gameContext"
 // TODO: Utiliser le theme tailwind pour les couleurs
 // TODO: Améliorer l'affichage du "turn"
-
-// TODO: Move and rename
-export enum PieceEnum {
-    red="red",
-    yellow="yellow",
-    empty="white"
-}
-
-// TODO: Move
-export const [turn, setTurn] = createSignal(PieceEnum.red)
 
 export default function () {
     const color = () => turn() == PieceEnum.red ? "#ff0000" : "#ffff00"

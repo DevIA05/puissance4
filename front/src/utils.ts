@@ -1,5 +1,5 @@
 import { boardStateDictType } from "./components/board";
-import { PieceEnum } from "./components/navbar";
+import { PieceEnum } from "./components/gameContext";
 
 function checkLeft(row: number, column: number, boardStateDict: boardStateDictType) {
     if (column < 3) return;
@@ -91,7 +91,7 @@ function checkDownRight(row: number, column: number, boardStateDict: boardStateD
 
 export function checkWin(row: number, column: number, boardStateDict: boardStateDictType) {
     if (boardStateDict[row][column] == PieceEnum.empty) return false;
-    
+
     if (checkLeft(row, column, boardStateDict)) return true;
     else if (checkRight(row, column, boardStateDict)) return true;
     else if (checkUp(row, column, boardStateDict)) return true;

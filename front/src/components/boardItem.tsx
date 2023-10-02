@@ -1,15 +1,9 @@
 import { createEffect, createSignal } from "solid-js"
 
+import { GameStepEnum, PieceEnum, setGameStep, switchTurn, turn } from "./gameContext"
 import { boardState, columns, rows, setBoardState } from "./board"
-import { PieceEnum, setTurn, turn } from "./navbar"
 
 import { checkWin } from "../utils"
-
-function switchTurn() {
-    setTurn((prev) =>
-        prev == PieceEnum.red ? PieceEnum.yellow : PieceEnum.red
-    )
-}
 
 type BoardItemProps = {
     row: number,
@@ -20,19 +14,20 @@ function onclick(row:number, column: number) {
     // If spot already taken
     if (boardState()[row][column] != PieceEnum.empty) return;
 
+    // Update board
     if (row == 5 || boardState()[row + 1][column] != PieceEnum.empty) {
         setBoardState((prev) => {
             const newDict = {...prev}
             newDict[row][column] = turn()
             return newDict
         })
-        // TODO: action  quand win ? popup ? bloquer la partie ?
         // Check win situations
         for (const row of rows) {
             for (const column of columns) {
                 const result = checkWin(row, column, boardState())
                 if (result) {
                     console.log(turn() + "wins");
+                    setGameStep(GameStepEnum.win)
                     break;
                 }
             }

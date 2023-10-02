@@ -1,6 +1,6 @@
 import { For, createSignal } from "solid-js"
 import BoardItem from "./boardItem"
-import { PieceEnum } from "./navbar"
+import { PieceEnum } from "./gameContext"
 
 export type boardStateDictType = { [key: number]: PieceEnum[] }
 
@@ -14,7 +14,6 @@ for (const row of rows) {
     boardStateDict[row] = [PieceEnum.empty,PieceEnum.empty,PieceEnum.empty,PieceEnum.empty,PieceEnum.empty,PieceEnum.empty,PieceEnum.empty]
 }
 
-// TODO: Move in context like file ?
 export const [boardState, setBoardState] = createSignal(boardStateDict) 
 
 export default function () {
