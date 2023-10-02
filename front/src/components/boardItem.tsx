@@ -1,13 +1,6 @@
 import { createEffect, createSignal, on } from "solid-js"
 import { boardState, setBoardState } from "./board"
-
-export enum PieceEnum {
-    red="red",
-    yellow="yellow",
-    empty="white"
-}
-
-const [turn, setTurn] = createSignal(PieceEnum.red)
+import { PieceEnum, setTurn, turn } from "./navbar"
 
 function switchTurn() {
     setTurn((prev) =>
@@ -21,6 +14,7 @@ type BoardItemProps = {
 }
 
 function onclick(row:number, column: number) {
+    if (boardState()[row][column] != PieceEnum.empty) return;
     if (row == 5 || boardState()[row + 1][column] != PieceEnum.empty) {
         setBoardState((prev) => {
             const newDict = {...prev}

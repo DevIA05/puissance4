@@ -1,5 +1,6 @@
 import { For, createSignal } from "solid-js"
-import BoardItem, { PieceEnum } from "./boardItem"
+import BoardItem from "./boardItem"
+import { PieceEnum } from "./navbar"
 
 export type boardStateDictType = { [key: number]: PieceEnum[] }
 
@@ -16,8 +17,8 @@ export const [boardState, setBoardState] = createSignal(boardStateDict)
 
 export default function () {
     return(
-        <div class="flex justify-center">
-            <div class="grid grid-cols-7">
+        <div class="flex justify-center mt-5">
+            <div class="grid grid-cols-7 bg-blue-800">
                 <For each={rows}>{(row: number) => {
                     return (<For each={columns}>{(column)=> {
                             return(<BoardItem row={row} column={column}/>)
