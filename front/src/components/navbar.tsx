@@ -1,6 +1,8 @@
 import { createSignal } from "solid-js"
+// TODO: Utiliser le theme tailwind pour les couleurs
+// TODO: Améliorer l'affichage du "turn"
 
-// TODO: Move
+// TODO: Move and rename
 export enum PieceEnum {
     red="red",
     yellow="yellow",
