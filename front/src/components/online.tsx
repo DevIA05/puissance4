@@ -2,8 +2,8 @@
 import { io } from 'socket.io-client';
 import GameContext, { GameStepEnum, PieceEnum, setGameStep, switchTurn } from './gameContext';
 import { createEffect, createSignal, onCleanup } from 'solid-js';
-import Board, { WinningPiecesType, boardStateDictType, setBoardState, setWinningPieces } from './board';
-import { playerMove } from './boardItem';
+import Board, { WinningPiecesType, boardStateDictType, getInitialBoard, setBoardState, setWinningPieces } from './board';
+import { playerMove, setPlayerMove } from './boardItem';
 
 export const [playerPieceColor, setPlayerPieceColor] = createSignal<PieceEnum>()
 
@@ -30,11 +30,17 @@ export default function () {
         console.log("red so opponent is already ready")
       }}
     )
+
+    socket.on("opponent left", () => {
+        console.log("opponent left")
+        setGameStep(GameStepEnum.opponentLeft)
+        socket.disconnect()
+    })
     
     createEffect(() => {
         const move = playerMove()
         if (!move) return;
-
+        console.log("ouais c'est laa")
         socket.emit("move", move)
     })
     
@@ -54,6 +60,8 @@ export default function () {
     onCleanup(()=> {
         // TODO: Check if working properly
         socket.disconnect()
+        setBoardState(getInitialBoard())
+        setPlayerMove()
     })
     return (
         <GameContext>

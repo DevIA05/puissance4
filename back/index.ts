@@ -80,7 +80,9 @@ io.on('connection', (socket) => {
   })
 
   socket.on("disconnect", () => {
-    // ! Disconnect the other player
+    // Disconnect the other player
+    io.to(roomId).emit("opponent left")
+
     console.log(playerPiece, "player of room", roomId, "disconnected by itself")
     console.log("rooms before reset",getRooms())
     resetRoom(Number(roomId))

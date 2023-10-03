@@ -9,7 +9,8 @@ export enum PieceEnum {
 export enum GameStepEnum {
     playing,
     draw,
-    win
+    win,
+    opponentLeft,
 }
 
 export const [turn, setTurn] = createSignal(PieceEnum.red)
