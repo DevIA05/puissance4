@@ -32,7 +32,7 @@ export default function () {
     })
     
     // TODO: Mettre en place ceux-ci
-    // socket.on("opponent move") => update board ; switch turn
+    // socket.on("opponent moved") => update board ; switch turn
     // socket.on("game result")
 
     onCleanup(()=> {

@@ -47,13 +47,12 @@ function onclickLocal(row:number, column: number) {
     }
 }
 
-// TODO: Refactor ?
 function onClickOnline(row:number, column: number) {
     if (turn() != playerPieceColor()) return;
     if (boardState()[row][column] != PieceEnum.empty) return;
 
     // TODO: Change to be able to click on the whole column
-    if (row == 5 || boardState()[row + 1][column] != PieceEnum.empty) { // TODO: ajouter condition turn
+    if (row == 5 || boardState()[row + 1][column] != PieceEnum.empty) {
         setPlayerMove({row, column})
     }
 }

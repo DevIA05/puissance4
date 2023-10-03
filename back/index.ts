@@ -36,13 +36,14 @@ io.on('connection', (socket) => {
   if (player == 2) {
     io.to(roomId).to(room.playerOneSocketId as string).emit("opponent ready")
   }
-  
+
   socket.on("move", (req) => {
     console.log("move => ", req)
+    // ! Mettre à jour le board, vérif les conditions de wins / null
     io.to(roomId).to(player == 1
       ? getRooms().filter((_room) => room.id == _room.id)[0].playerTwoSocketId as string
       : getRooms().filter((_room) => room.id == _room.id)[0].playerOneSocketId as string)
-      .emit('opponent move', req)
+      .emit('opponent moved', req) // ! Envoyer le board actualisé plutôt
   })
   // TODO: Add an listenner to the disconnect event from client 
   // and remove from the room (socket and variable) 

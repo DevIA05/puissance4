@@ -1,12 +1,20 @@
+import { boardStateDictType, getInitialBoard } from "./board.utils"
+
 type RoomType = {
     id: number,
     playerOneSocketId: string | undefined,
     playerTwoSocketId: string | undefined,
+    board: boardStateDictType,
 }
 
 // TODO: Utiliser une DB !?
 let rooms: RoomType[] = [0,1,2].map((id) => {
-    return {id, playerOneSocketId: undefined, playerTwoSocketId: undefined}
+    return {
+        id,
+        playerOneSocketId: undefined,
+        playerTwoSocketId: undefined,
+        board: getInitialBoard()
+    }
 })
 
 export function getRooms() {
