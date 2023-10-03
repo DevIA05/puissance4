@@ -2,23 +2,12 @@ import { Show } from "solid-js";
 import { actualPage, PageEnum, gameLanguage, setActualPage } from "../App";
 import { backToModeSelection } from "./languageDict";
 import { GameStepEnum, PieceEnum, setGameStep, setTurn } from "./gameContext";
-import { boardState, boardStateDictType, rows, setBoardState, setWinningPieces } from "./board";
-
-function getInitialBoard() {
-    const initialBoardStateDict: boardStateDictType = {}
-    
-    // TODO: Rewrite
-    for (const row of rows) {
-        initialBoardStateDict[row] = [PieceEnum.empty,PieceEnum.empty,PieceEnum.empty,PieceEnum.empty,PieceEnum.empty,PieceEnum.empty,PieceEnum.empty]
-    }
-    return initialBoardStateDict
-}
+import { getInitialBoard, setBoardState, setWinningPieces } from "./board";
 
 function resetLocalGame() {
     setTurn(PieceEnum.red)
     setWinningPieces([])
     setBoardState(getInitialBoard())
-    console.log(boardState())
     setGameStep(GameStepEnum.playing)
 }
 
