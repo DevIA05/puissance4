@@ -1,4 +1,4 @@
-import { boardState, boardStateDictType, columns, rows } from "./components/board";
+import { WinningPiecesType, boardState, boardStateDictType, columns, rows } from "./components/board";
 import { GameStepEnum, PieceEnum, gameStep, setGameStep, turn } from "./components/gameContext";
 
 // TODO: Delete useless: checkLeft, checkDown, checkUpRight, checkDownRight ??
@@ -92,30 +92,35 @@ function checkDownRight(row: number, column: number, boardStateDict: boardStateD
 }
 
 function checkWin(row: number, column: number, boardStateDict: boardStateDictType) {
-    if (boardStateDict[row][column] == PieceEnum.empty) return false;
+    const winningPieces: WinningPiecesType = []
 
-    if (checkLeft(row, column, boardStateDict)) return true;
-    else if (checkRight(row, column, boardStateDict)) return true;
-    else if (checkUp(row, column, boardStateDict)) return true;
-    else if (checkDown(row, column, boardStateDict)) return true;
-    else if (checkDownLeft(row, column, boardStateDict)) return true;
-    else if (checkUpLeft(row, column, boardStateDict)) return true;
-    else if (checkUpRight(row, column, boardStateDict)) return true;
-    else if (checkDownRight(row, column, boardStateDict)) return true;
-    else return false;
+    if (boardStateDict[row][column] == PieceEnum.empty) return [];
+
+    if (checkLeft(row, column, boardStateDict)) winningPieces.push(...[{row, column}, {row:row, column:column -1}, {row:row, column:column -2}, {row:row, column:column -3}]);
+    if (checkRight(row, column, boardStateDict)) winningPieces.push(...[{row, column}, {row:row, column:column +1}, {row:row, column:column +2}, {row:row, column:column +3}]);
+    if (checkUp(row, column, boardStateDict)) winningPieces.push(...[{row, column}, {row:row -1, column}, {row:row -2, column}, {row:row -3, column}]);
+    if (checkDown(row, column, boardStateDict)) winningPieces.push(...[{row, column}, {row:row +1, column}, {row:row +2, column}, {row:row +3, column}]);
+    if (checkDownLeft(row, column, boardStateDict)) winningPieces.push(...[{row, column}, {row:row +1, column:column -1}, {row:row +2, column:column -2}, {row:row +3, column:column -3}]);
+    if (checkUpLeft(row, column, boardStateDict)) winningPieces.push(...[{row, column}, {row:row-1, column:column -1}, {row:row-2, column:column -2}, {row:row-3, column:column -3}]);
+    if (checkUpRight(row, column, boardStateDict)) winningPieces.push(...[{row, column}, {row:row-1, column:column +1}, {row:row-2, column:column +2}, {row:row-3, column:column +3}]);
+    if (checkDownRight(row, column, boardStateDict)) winningPieces.push(...[{row, column}, {row:row +1, column:column +1}, {row:row +2, column:column +2}, {row:row +3, column:column +3}]);
+
+    return winningPieces
 }
 
 export function checkWinGlobal() {
+    const totalWinningPieces: WinningPiecesType = []
+
     for (const row of rows) {
         for (const column of columns) {
-            const result = checkWin(row, column, boardState())
-            if (result) {
+            const winningPieces = checkWin(row, column, boardState())
+            if (winningPieces.length > 0) {
                 console.log(turn() + "wins");
-                return true;
+                totalWinningPieces.push(...winningPieces)
             }
         }
     }
-    return false
+    return totalWinningPieces
 }
 
 export function checkNull() {

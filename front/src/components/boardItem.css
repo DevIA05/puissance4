@@ -1,0 +1,9 @@
+@keyframes blinking {
+    50% {
+        fill: white;
+    }
+}
+
+.blink {
+    animation: blinking 1s infinite;
+}
