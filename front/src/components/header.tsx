@@ -3,7 +3,8 @@ import { PieceEnum, turn } from "./gameContext"
 import { LanguageEnum, gameTitle } from "./languageDict"
 // TODO: Utiliser le theme tailwind pour les couleurs
 // TODO: Améliorer l'affichage du "turn"
-
+// TODO: Ajouter possibilité de switch de langue
+// TODO: Ajouter possibilté de revenir au choix du mode de jeu
 export default function () {
     // const color = () => turn() == PieceEnum.red ? "#ff0000" : "#ffff00"
     return(
