@@ -1,8 +1,9 @@
 // TODO: refactor with / use board.tsx
 import { io } from 'socket.io-client';
 import GameContext, { PieceEnum } from './gameContext';
-import { onCleanup } from 'solid-js';
+import { createEffect, onCleanup } from 'solid-js';
 import Board from './board';
+import { playerMove } from './boardItem';
 
 export default function () {
     let playerPieceColor :PieceEnum
@@ -20,8 +21,19 @@ export default function () {
         )
       } else {
         console.log("red so opponent is already ready")
-      }
+      }}
+    )
+    
+    createEffect(() => {
+        const move = playerMove()
+        if (!move) return;
+
+        socket.emit("move", move)
     })
+    
+    // TODO: Mettre en place ceux-ci
+    // socket.on("opponent move") => update board ; switch turn
+    // socket.on("game result")
 
     onCleanup(()=> {
         // TODO: Check if working properly

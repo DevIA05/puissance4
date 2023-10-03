@@ -72,7 +72,7 @@ io.on('connection', (socket) => {
     io.to(roomId).to(room.playerOneSocketId as string).emit("opponent ready")
   }
   socket.on("move", (req) => {
-    console.log("req", req)
+    console.log("move => ", req)
     io.to(roomId).to(player == 1
       ? rooms.filter((_room) => room.id == _room.id)[0].playerTwoSocketId as string
       : rooms.filter((_room) => room.id == _room.id)[0].playerOneSocketId as string)

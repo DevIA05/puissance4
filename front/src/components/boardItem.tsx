@@ -2,21 +2,28 @@ import { createEffect, createSignal } from "solid-js"
 
 import { GameStepEnum, PieceEnum, gameStep, setGameStep, setTurn, switchTurn, turn } from "./gameContext"
 import { boardState, setWinningPieces, updateBoard, winningPieces } from "./board"
+import { PageEnum, actualPage } from "../App"
 
 import { checkNull, checkWinGlobal } from "../winDetection.utils"
 
 import "./boardItem.css"
-import { PageEnum, actualPage } from "../App"
 
 type BoardItemProps = {
     row: number,
     column: number
 }
+type PlayerMoveType = {
+    row: number,
+    column: number
+}
+
+export const [playerMove, setPlayerMove] = createSignal<PlayerMoveType>()
 
 function onclickLocal(row:number, column: number) {
     // If spot already taken
     if (boardState()[row][column] != PieceEnum.empty) return;
-
+    
+    // TODO: Change to be able to click on the whole column
     if (row == 5 || boardState()[row + 1][column] != PieceEnum.empty) {
         // Update board
         updateBoard(row, column)
@@ -39,8 +46,16 @@ function onclickLocal(row:number, column: number) {
     }
 }
 
+// TODO: Refactor ?
 function onClickOnline(row:number, column: number) {
-    console.log("TODO")
+    
+    // If spot already taken
+    if (boardState()[row][column] != PieceEnum.empty) return;
+
+    // TODO: Change to be able to click on the whole column
+    if (row == 5 || boardState()[row + 1][column] != PieceEnum.empty) { // TODO: ajouter condition turn
+        setPlayerMove({row, column})
+    }
 }
 
 export default function (props: BoardItemProps) {
