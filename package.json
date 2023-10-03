@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "boardgame.io": "^0.50.2",
+    "mcts": "^0.0.8"
+  }
+}
