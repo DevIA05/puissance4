@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 
 import { getAvailableRoom, getRooms, updateRooms } from './room.utils';
 import { PieceEnum, PlayerMoveType, updateBoard } from './board.utils';
-import { GameStepEnum, checkWinGlobal } from './winDetection.utils';
+import { GameStepEnum, checkNull, checkWinGlobal } from './winDetection.utils';
 
 //For env File 
 dotenv.config();
@@ -33,7 +33,6 @@ io.on('connection', (socket) => {
   const playerPiece = player == 1 ? PieceEnum.yellow : PieceEnum.red
   
   console.log('new player (', playerPiece, ') connected in room', roomId)
-  // console.log("room", room)
 
   socket.emit("player color", player == 1 ? "yellow" : "red"); // ! Pas une erreur ici mais intentionel
 
@@ -44,6 +43,7 @@ io.on('connection', (socket) => {
     io.to(roomId).to(room.playerOneSocketId as string).emit("opponent ready")
   }
 
+  // TODO: Put the anonymous function in external file
   socket.on("move", (req: PlayerMoveType) => {
     console.log(playerPiece, "move =>", req)
     // TODO: Verify if the move is legal (turn, position) ?? Actualy dealt by the front
@@ -64,13 +64,21 @@ io.on('connection', (socket) => {
         winningPieces: totalWinningPieces
       })
       // TODO: Disconnect socket and reset rooms
-      // ! Vérif la condition de null
+      // TODO: Verify if this works properly
+    } else if (checkNull(updatedRoom.board)){
+      console.log("draw in room", roomId)
+
+      io.to(roomId).emit("game result", {
+        result: GameStepEnum.draw,
+        board: updatedRoom.board
+      })
+      // TODO: Disconnect socket and reset rooms
     } else {
-      io.to(roomId).emit('moved', updatedRoom.board) // ! Envoyer le board actualisé plutôt
+      io.to(roomId).emit('moved', updatedRoom.board)
     }
   })
   // TODO: Add an listenner to the disconnect event from client 
-  // and remove from the room (socket and variable) 
+  // and remove from the room (socket and variable)
 })
 
 server.listen(port, () => {

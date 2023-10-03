@@ -45,7 +45,9 @@ export default function () {
     })
     socket.on("game result", (req: WinningRequestType) => {
         setBoardState(req.board);
-        setWinningPieces(req.winningPieces as WinningPiecesType)
+        if (req.winningPieces) {
+            setWinningPieces(req.winningPieces)
+        }
         setGameStep(req.result)
     })
 
