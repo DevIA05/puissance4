@@ -6,13 +6,14 @@ import { boardState, setWinningPieces, updateBoard, winningPieces } from "./boar
 import { checkNull, checkWinGlobal } from "../winDetection.utils"
 
 import "./boardItem.css"
+import { PageEnum, actualPage } from "../App"
 
 type BoardItemProps = {
     row: number,
     column: number
 }
 
-function onclick(row:number, column: number) {
+function onclickLocal(row:number, column: number) {
     // If spot already taken
     if (boardState()[row][column] != PieceEnum.empty) return;
 
@@ -38,6 +39,10 @@ function onclick(row:number, column: number) {
     }
 }
 
+function onClickOnline(row:number, column: number) {
+    console.log("TODO")
+}
+
 export default function (props: BoardItemProps) {
     const [fillColor, setFillColor] = createSignal<PieceEnum>(PieceEnum.empty)
     const [isBlinking, setIsBlinking] = createSignal(false)
@@ -53,7 +58,10 @@ export default function (props: BoardItemProps) {
     })
 
     return (
-        <svg height="100" width="100" onClick={() => onclick(props.row, props.column)}>
+        <svg height="100" width="100" onClick={() => actualPage() == PageEnum.local
+            ? onclickLocal(props.row, props.column)
+            : onClickOnline(props.row, props.column)}
+        >
             <circle class={isBlinking() ? "blink": ""} cx="50" cy="50" r="40" stroke="black" stroke-width="1" fill={fillColor()} />
         </svg>
     )

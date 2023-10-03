@@ -58,21 +58,25 @@ function updateRooms(room: RoomType, socketId: string) {
 }
 
 io.on('connection', (socket) => {
-  console.log('new user connected')
+  console.log('new player connected')
+
   const room = getAvailableRoom(rooms)
-  
+  const roomId = String(room.id)
   const player = updateRooms(room, socket.id)
+
   console.log("room", room)
   socket.emit("is player", player == 1 ? "yellow" : "red"); // ! Pas une erreur ici mais intentionel
-  // Exemple message
-  // socket.emit('message', 'Welcome to Connect 4 backend via websocket');
-  socket.join(String(room.id))
+
+  socket.join(roomId)
+  if (player == 2) {
+    io.to(roomId).to(room.playerOneSocketId as string).emit("opponent ready")
+  }
   socket.on("move", (req) => {
     console.log("req", req)
-    io.to(String(room.id)).to(player == 1
+    io.to(roomId).to(player == 1
       ? rooms.filter((_room) => room.id == _room.id)[0].playerTwoSocketId as string
       : rooms.filter((_room) => room.id == _room.id)[0].playerOneSocketId as string)
-      .emit('adversary move', req)
+      .emit('opponent move', req)
   })
   // TODO: Add an listenner to the disconnect event from client 
   // and remove from the room (socket and variable) 
