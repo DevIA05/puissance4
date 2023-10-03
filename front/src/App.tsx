@@ -1,4 +1,4 @@
-import type { JSXElement } from 'solid-js';
+import { createSignal, Switch, type JSXElement, Match } from 'solid-js';
 
 // TODO: Mettre en place un composant "context" `gameState` ?
 
@@ -12,15 +12,31 @@ import Menu from './components/menu';
 // TODO: The user should be able to change langage
 export const gameLanguage = LanguageEnum.ch
 
+// TODO: Rename
+export enum PageEnum {
+  menu,
+  local,
+  online,
+  ia
+}
+
+// TODO: Rename
+export const [actualPage, setActualPage] = createSignal(PageEnum.menu)
+
 export default function (): JSXElement {
   return (
     <>
       <Header />
-      <Menu />
-      {/* <GameContext> */}
-        {/* <Header /> */}
-        {/* <Board /> */}
-      {/* </GameContext> */}
+      <Switch>
+        <Match when={actualPage() == PageEnum.menu}>
+          <Menu />
+        </Match>
+        <Match when={actualPage() == PageEnum.local}>
+          <GameContext>
+            <Board />
+          </GameContext>
+        </Match>
+      </Switch>
     </>
   )
 }
