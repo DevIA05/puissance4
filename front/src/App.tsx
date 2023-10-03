@@ -10,7 +10,7 @@ import Menu from './components/menu';
 
 // TODO: Par default utiliser la langue du browser
 // TODO: The user should be able to change langage
-export const gameLanguage = LanguageEnum.ch
+export const gameLanguage = LanguageEnum.fr
 
 // TODO: Rename
 export enum PageEnum {

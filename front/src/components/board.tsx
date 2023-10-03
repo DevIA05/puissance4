@@ -8,14 +8,14 @@ export type WinningPiecesType = { row: number, column: number}[]
 export const rows = [0, 1, 2, 3, 4, 5]
 export const columns = [0, 1, 2, 3, 4, 5, 6]
 
-const boardStateDict: boardStateDictType = {}
+export const initialBoardStateDict: boardStateDictType = {}
 
 // TODO: Rewrite
 for (const row of rows) {
-    boardStateDict[row] = [PieceEnum.empty,PieceEnum.empty,PieceEnum.empty,PieceEnum.empty,PieceEnum.empty,PieceEnum.empty,PieceEnum.empty]
+    initialBoardStateDict[row] = [PieceEnum.empty,PieceEnum.empty,PieceEnum.empty,PieceEnum.empty,PieceEnum.empty,PieceEnum.empty,PieceEnum.empty]
 }
 
-export const [boardState, setBoardState] = createSignal(boardStateDict)
+export const [boardState, setBoardState] = createSignal(initialBoardStateDict)
 
 export const [winningPieces, setWinningPieces] = createSignal<WinningPiecesType>([])
 
