@@ -10,8 +10,12 @@ export type PlayerMoveType = {
 }
 
 export type boardStateDictType = { [key: number]: PieceEnum[] }
+export type WinningPiecesType = { row: number, column: number}[]
 
-const rows = [0, 1, 2, 3, 4, 5]
+
+export const rows = [0, 1, 2, 3, 4, 5]
+export const columns = [0, 1, 2, 3, 4, 5, 6]
+
 
 export function getInitialBoard() {
     const initialBoardStateDict: boardStateDictType = {}

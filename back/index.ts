@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 
 import { getAvailableRoom, getRooms, updateRooms } from './room.utils';
 import { PieceEnum, PlayerMoveType, updateBoard } from './board.utils';
+import { GameStepEnum, checkWinGlobal } from './winDetection.utils';
 
 //For env File 
 dotenv.config();
@@ -23,15 +24,15 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 io.on('connection', (socket) => {
-  console.log('new player connected')
-
+  
   const room = getAvailableRoom()
   const roomId = String(room.id)
   const player = updateRooms(room, socket.id)
   // TODO: Use this for the emit just after
   const playerPiece = player == 1 ? PieceEnum.yellow : PieceEnum.red
-
-  console.log("room", room)
+  
+  console.log('new player connected in room', roomId)
+  // console.log("room", room)
   socket.emit("is player", player == 1 ? "yellow" : "red"); // ! Pas une erreur ici mais intentionel
 
   socket.join(roomId)
@@ -44,16 +45,25 @@ io.on('connection', (socket) => {
     console.log("move => ", req)
     // Mise à jour du board
     room.board = updateBoard(req.row, req.column, room.board, playerPiece)
-    updateRooms(room, socket.id)
-    // console.log("room updated => ", getRooms().filter((_room) => _room.id == room.id)[0].board)
-    // ! Vérif les conditions de wins / null
-    
-    // ! Renvoyer le board updated
-    // socket.emit()
-    io.to(roomId).to(player == 1
-      ? getRooms().filter((_room) => room.id == _room.id)[0].playerTwoSocketId as string
-      : getRooms().filter((_room) => room.id == _room.id)[0].playerOneSocketId as string)
-      .emit('opponent moved', req) // ! Envoyer le board actualisé plutôt
+    updateRooms(room, socket.id) // TODO: May return updatedRoom !?
+    const updatedRoom = getRooms().filter((_room) => _room.id == room.id)[0]
+    // console.log("updatedRoom", updatedRoom)
+    // ! Use getRooms().filter ??
+    // TODO: Check that the winning condition is working properly
+    // Winning condition
+    const totalWinningPieces = checkWinGlobal(updatedRoom.board)
+    if (totalWinningPieces.length > 0) {
+      console.log("in room", roomId, "player", playerPiece, "won")
+      io.to(roomId).emit("game result", {
+        result: GameStepEnum.win,
+        board: updatedRoom.board,
+        winningPieces: totalWinningPieces
+      })
+      // TODO: Disconnect socket and reset rooms
+      // ! Vérif la condition de null
+    } else {
+      io.to(roomId).emit('moved', updatedRoom.board) // ! Envoyer le board actualisé plutôt
+    }
   })
   // TODO: Add an listenner to the disconnect event from client 
   // and remove from the room (socket and variable) 

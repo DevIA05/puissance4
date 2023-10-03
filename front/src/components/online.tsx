@@ -1,11 +1,18 @@
 // TODO: refactor with / use board.tsx
 import { io } from 'socket.io-client';
-import GameContext, { PieceEnum } from './gameContext';
+import GameContext, { GameStepEnum, PieceEnum, setGameStep } from './gameContext';
 import { createEffect, createSignal, onCleanup } from 'solid-js';
-import Board from './board';
+import Board, { WinningPiecesType, boardStateDictType, setBoardState, setWinningPieces } from './board';
 import { playerMove } from './boardItem';
 
 export const [playerPieceColor, setPlayerPieceColor] = createSignal<PieceEnum>()
+
+// TODO: Don't use GameStepEnum but a specific one ?
+type WinningRequestType = {
+    result: GameStepEnum,
+    board: boardStateDictType,
+    winningPieces?: WinningPiecesType
+}
 
 export default function () {
     // TODO: Put url in .env
@@ -31,9 +38,15 @@ export default function () {
         socket.emit("move", move)
     })
     
-    // TODO: Mettre en place ceux-ci
-    // socket.on("opponent moved") => update board ; switch turn
-    // socket.on("game result")
+    // TODO: Check these ones works properly
+    socket.on("moved", (req: boardStateDictType)=> {
+        setBoardState(req)
+    })
+    socket.on("game result", (req: WinningRequestType) => {
+        setBoardState(req.board);
+        setWinningPieces(req.winningPieces as WinningPiecesType)
+        setGameStep(req.result)
+    })
 
     onCleanup(()=> {
         // TODO: Check if working properly

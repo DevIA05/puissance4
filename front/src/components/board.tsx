@@ -3,6 +3,7 @@ import BoardItem from "./boardItem"
 import { PieceEnum, turn } from "./gameContext"
 
 export type boardStateDictType = { [key: number]: PieceEnum[] }
+// TODO: Use PieceType[] instead !?
 export type WinningPiecesType = { row: number, column: number}[]
 
 export const rows = [0, 1, 2, 3, 4, 5]
@@ -18,7 +19,7 @@ export function getInitialBoard() {
     return initialBoardStateDict
 }
 
-export const [boardState, setBoardState] = createSignal(getInitialBoard())
+export const [boardState, setBoardState] = createSignal<boardStateDictType>(getInitialBoard())
 
 export const [winningPieces, setWinningPieces] = createSignal<WinningPiecesType>([])
 
