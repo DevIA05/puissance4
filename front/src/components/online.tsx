@@ -1,6 +1,6 @@
 // TODO: refactor with / use board.tsx
 import { io } from 'socket.io-client';
-import GameContext, { GameStepEnum, PieceEnum, setGameStep } from './gameContext';
+import GameContext, { GameStepEnum, PieceEnum, setGameStep, switchTurn } from './gameContext';
 import { createEffect, createSignal, onCleanup } from 'solid-js';
 import Board, { WinningPiecesType, boardStateDictType, setBoardState, setWinningPieces } from './board';
 import { playerMove } from './boardItem';
@@ -40,6 +40,7 @@ export default function () {
     
     // TODO: Check these ones works properly
     socket.on("moved", (req: boardStateDictType)=> {
+        switchTurn()
         setBoardState(req)
     })
     socket.on("game result", (req: WinningRequestType) => {

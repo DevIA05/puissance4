@@ -42,6 +42,7 @@ io.on('connection', (socket) => {
   }
 
   socket.on("move", (req: PlayerMoveType) => {
+    // TODO: Verify if the move is legal (turn, position) ?? Actualy dealt by the front
     console.log("move => ", req)
     // Mise à jour du board
     room.board = updateBoard(req.row, req.column, room.board, playerPiece)
