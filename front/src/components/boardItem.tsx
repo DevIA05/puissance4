@@ -7,6 +7,7 @@ import { PageEnum, actualPage } from "../App"
 import { checkNull, checkWinGlobal } from "../winDetection.utils"
 
 import "./boardItem.css"
+import { playerPieceColor } from "./online"
 
 type BoardItemProps = {
     row: number,
@@ -48,8 +49,7 @@ function onclickLocal(row:number, column: number) {
 
 // TODO: Refactor ?
 function onClickOnline(row:number, column: number) {
-    
-    // If spot already taken
+    if (turn() != playerPieceColor()) return;
     if (boardState()[row][column] != PieceEnum.empty) return;
 
     // TODO: Change to be able to click on the whole column
