@@ -1,3 +1,4 @@
+/* TODO: Blink with corresponding darker color */
 @keyframes blinking {
     50% {
         fill: white;
