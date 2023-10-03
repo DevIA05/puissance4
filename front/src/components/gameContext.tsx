@@ -9,7 +9,7 @@ export enum PieceEnum {
 
 export enum GameStepEnum {
     playing,
-    null,
+    draw,
     win
 }
 

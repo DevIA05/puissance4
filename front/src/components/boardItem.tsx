@@ -24,7 +24,7 @@ function onclick(row:number, column: number) {
 
         // Check null situations
         } else if (checkNull()) {
-            setGameStep(GameStepEnum.null)
+            setGameStep(GameStepEnum.draw)
         }
 
         // Switch to other player

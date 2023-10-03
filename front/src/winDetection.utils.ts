@@ -122,7 +122,7 @@ export function checkNull() {
     if (gameStep() == GameStepEnum.playing) {
         const emptyPos = boardState()[0].filter((piece) => piece == PieceEnum.empty)
         if (emptyPos.length == 0) {
-            console.log("match null")
+            console.log("tie")
             return true
         } else return false;
     }
