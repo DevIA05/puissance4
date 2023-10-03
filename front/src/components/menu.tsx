@@ -11,7 +11,7 @@ export default function () {
     return (
         <div class="grid grid-cols-3 justify-center mt-10 h-40">
                 <MenuButton title={gameModeLocal[gameLanguage]} onClick={() => onClick(PageEnum.local)}/>
-                <MenuButton title={gameModeOnline[gameLanguage]} onClick={() => console.log("TODO switch to mode online")}/>
+                <MenuButton title={gameModeOnline[gameLanguage]} onClick={() => onClick(PageEnum.online)}/>
                 <MenuButton title={gameModeIA[gameLanguage]} onClick={() => console.log("TODO switch to mode IA")}/>
         </div>
     )
