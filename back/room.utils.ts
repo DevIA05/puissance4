@@ -30,6 +30,7 @@ export function getAvailableRoom() {
     }
 }
 
+// TODO: Rename
 export function updateRooms(room: RoomType, socketId: string) {
     let player:number;
     if (!room.playerOneSocketId) {
@@ -44,4 +45,15 @@ export function updateRooms(room: RoomType, socketId: string) {
     oldRooms.push(room)
     rooms = oldRooms
     return player
+}
+
+export function resetRoom(roomId: number) {
+    const oldRooms = rooms.filter((_room) => roomId != _room.id)
+    oldRooms.push({
+        id: roomId,
+        playerOneSocketId: undefined,
+        playerTwoSocketId: undefined,
+        board: getInitialBoard()    
+    })
+    rooms = oldRooms
 }

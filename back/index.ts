@@ -3,7 +3,7 @@ import { createServer } from 'node:http';
 import { Server } from 'socket.io'
 import dotenv from 'dotenv';
 
-import { getAvailableRoom, getRooms, updateRooms } from './room.utils';
+import { getAvailableRoom, getRooms, resetRoom, updateRooms } from './room.utils';
 import { PieceEnum, PlayerMoveType, updateBoard } from './board.utils';
 import { GameStepEnum, checkNull, checkWinGlobal } from './winDetection.utils';
 
@@ -65,6 +65,7 @@ io.on('connection', (socket) => {
       })
       // TODO: Disconnect socket and reset rooms
       // TODO: Verify if this works properly
+    // Draw condition
     } else if (checkNull(updatedRoom.board)){
       console.log("draw in room", roomId)
 
@@ -76,6 +77,15 @@ io.on('connection', (socket) => {
     } else {
       io.to(roomId).emit('moved', updatedRoom.board)
     }
+  })
+
+  socket.on("disconnect", () => {
+    // ! Disconnect the other player
+    console.log(playerPiece, "player of room", roomId, "disconnected by itself")
+    console.log("rooms before reset",getRooms())
+    resetRoom(Number(roomId))
+    console.log("rooms after reset",getRooms())
+
   })
   // TODO: Add an listenner to the disconnect event from client 
   // and remove from the room (socket and variable)
