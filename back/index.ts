@@ -13,6 +13,7 @@ const port = process.env.PORT;
 
 const app: Application = express();
 const server = createServer(app)
+// TODO: Mettre en place un fichier webSocket.ts !? comment ?
 const io = new Server(server, {
   cors:{
     origin: "*"
@@ -31,10 +32,12 @@ io.on('connection', (socket) => {
   // TODO: Use this for the emit just after
   const playerPiece = player == 1 ? PieceEnum.yellow : PieceEnum.red
   
-  console.log('new player connected in room', roomId)
+  console.log('new player (', playerPiece, ') connected in room', roomId)
   // console.log("room", room)
-  socket.emit("is player", player == 1 ? "yellow" : "red"); // ! Pas une erreur ici mais intentionel
 
+  socket.emit("player color", player == 1 ? "yellow" : "red"); // ! Pas une erreur ici mais intentionel
+
+  // TODO: When game ended, delete / empty the room
   socket.join(roomId)
 
   if (player == 2) {
@@ -42,19 +45,19 @@ io.on('connection', (socket) => {
   }
 
   socket.on("move", (req: PlayerMoveType) => {
+    console.log(playerPiece, "move =>", req)
     // TODO: Verify if the move is legal (turn, position) ?? Actualy dealt by the front
-    console.log("move => ", req)
+
     // Mise à jour du board
     room.board = updateBoard(req.row, req.column, room.board, playerPiece)
-    updateRooms(room, socket.id) // TODO: May return updatedRoom !?
+    updateRooms(room, socket.id)
     const updatedRoom = getRooms().filter((_room) => _room.id == room.id)[0]
-    // console.log("updatedRoom", updatedRoom)
-    // ! Use getRooms().filter ??
-    // TODO: Check that the winning condition is working properly
+
     // Winning condition
     const totalWinningPieces = checkWinGlobal(updatedRoom.board)
     if (totalWinningPieces.length > 0) {
       console.log("in room", roomId, "player", playerPiece, "won")
+
       io.to(roomId).emit("game result", {
         result: GameStepEnum.win,
         board: updatedRoom.board,

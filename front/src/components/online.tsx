@@ -19,7 +19,7 @@ export default function () {
     const socket = io('http://localhost:8000')
 
     // player color
-    socket.on("is player", (req) => {
+    socket.on("player color", (req) => {
       console.log(req)
       setPlayerPieceColor(req == "red" ? PieceEnum.red : PieceEnum.yellow)
       if (req == "yellow") {
