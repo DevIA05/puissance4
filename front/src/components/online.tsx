@@ -8,7 +8,7 @@ import { playerMove } from './boardItem';
 export const [playerPieceColor, setPlayerPieceColor] = createSignal<PieceEnum>()
 
 export default function () {
-    // TODO: Put in .env
+    // TODO: Put url in .env
     const socket = io('http://localhost:8000')
 
     // player color

@@ -4,6 +4,7 @@ import { Server } from 'socket.io'
 import dotenv from 'dotenv';
 
 import { getAvailableRoom, getRooms, updateRooms } from './room.utils';
+import { PieceEnum, PlayerMoveType, updateBoard } from './board.utils';
 
 //For env File 
 dotenv.config();
@@ -27,6 +28,8 @@ io.on('connection', (socket) => {
   const room = getAvailableRoom()
   const roomId = String(room.id)
   const player = updateRooms(room, socket.id)
+  // TODO: Use this for the emit just after
+  const playerPiece = player == 1 ? PieceEnum.yellow : PieceEnum.red
 
   console.log("room", room)
   socket.emit("is player", player == 1 ? "yellow" : "red"); // ! Pas une erreur ici mais intentionel
@@ -37,9 +40,16 @@ io.on('connection', (socket) => {
     io.to(roomId).to(room.playerOneSocketId as string).emit("opponent ready")
   }
 
-  socket.on("move", (req) => {
+  socket.on("move", (req: PlayerMoveType) => {
     console.log("move => ", req)
-    // ! Mettre à jour le board, vérif les conditions de wins / null
+    // Mise à jour du board
+    room.board = updateBoard(req.row, req.column, room.board, playerPiece)
+    updateRooms(room, socket.id)
+    // console.log("room updated => ", getRooms().filter((_room) => _room.id == room.id)[0].board)
+    // ! Vérif les conditions de wins / null
+    
+    // ! Renvoyer le board updated
+    // socket.emit()
     io.to(roomId).to(player == 1
       ? getRooms().filter((_room) => room.id == _room.id)[0].playerTwoSocketId as string
       : getRooms().filter((_room) => room.id == _room.id)[0].playerOneSocketId as string)
