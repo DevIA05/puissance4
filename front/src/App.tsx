@@ -1,5 +1,4 @@
 import { createSignal, Switch, type JSXElement, Match } from 'solid-js';
-import { io } from 'socket.io-client';
 
 import Header from './components/header';
 import Board from './components/board';
@@ -7,13 +6,6 @@ import GameContext from './components/gameContext';
 import { LanguageEnum } from './components/languageDict';
 import Menu from './components/menu';
 import Online from './components/online';
-
-// TODO: Move this elsewere (in component Board online)
-// const socket = io('http://localhost:8000')
-// socket.emit("test request", 123)
-// socket.on("message", (req) => {
-//   console.log(req)
-// })
 
 // TODO: Par default utiliser la langue du browser
 // TODO: The user should be able to change langage

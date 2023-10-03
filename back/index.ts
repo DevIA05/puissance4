@@ -33,7 +33,12 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 function getAvailableRoom(rooms: RoomType[]) {
-  return rooms.filter((room) => !room.playerOneSocketId|| !room.playerTwoSocketId)[0]
+  const roomForPlayerTwo = rooms.filter((room) => room.playerOneSocketId && !room.playerTwoSocketId)
+  if (roomForPlayerTwo.length != 0) {
+    return roomForPlayerTwo[0]
+  } else {
+    return rooms.filter((room) => !room.playerOneSocketId)[0]
+  }
 }
 
 function updateRooms(room: RoomType, socketId: string) {
@@ -55,8 +60,9 @@ function updateRooms(room: RoomType, socketId: string) {
 io.on('connection', (socket) => {
   console.log('new user connected')
   const room = getAvailableRoom(rooms)
-
+  
   const player = updateRooms(room, socket.id)
+  console.log("room", room)
   socket.emit("is player", player == 1 ? "yellow" : "red"); // ! Pas une erreur ici mais intentionel
   // Exemple message
   // socket.emit('message', 'Welcome to Connect 4 backend via websocket');
@@ -68,6 +74,8 @@ io.on('connection', (socket) => {
       : rooms.filter((_room) => room.id == _room.id)[0].playerOneSocketId as string)
       .emit('adversary move', req)
   })
+  // TODO: Add an listenner to the disconnect event from client 
+  // and remove from the room (socket and variable) 
 })
 
 server.listen(port, () => {
