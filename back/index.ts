@@ -3,9 +3,9 @@ import { createServer } from 'node:http';
 import { Server } from 'socket.io'
 import dotenv from 'dotenv';
 
-import { getAvailableRoom, getRooms, resetRoom, updateRooms } from './room.utils';
-import { PieceEnum, PlayerMoveType, updateBoard } from './board.utils';
-import { GameStepEnum, checkNull, checkWinGlobal } from './winDetection.utils';
+import { getAvailableRoom, getRooms, resetRoom, updateRooms } from './utils/room.utils';
+import { PieceEnum, PlayerMoveType, updateBoard } from './utils/board.utils';
+import { GameStepEnum, checkNull, checkWinGlobal } from './utils/winDetection.utils';
 
 //For env File 
 dotenv.config();
