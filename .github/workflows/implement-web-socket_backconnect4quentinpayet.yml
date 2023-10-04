@@ -20,9 +20,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '18.x'
-          path: ./back/
 
       - name: npm install, build, and test
+        working-directory: ./back/
         run: |
           npm install
           npm run build --if-present
