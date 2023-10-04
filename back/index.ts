@@ -8,8 +8,8 @@ import { webSocketConnection } from './webSocket';
 
 //For env File 
 dotenv.config();
-const port = process.env.PORT;
-const hostname = process.env.HOSTNAME;
+const hostname = 'localhost';
+const port = 8000;
 
 const app: Application = express();
 const server = createServer(app)
@@ -26,6 +26,9 @@ app.get('/', (req: Request, res: Response) => {
 
 io.on('connection', (socket) => webSocketConnection(socket, io))
 
-server.listen(Number(port), hostname,() => {
-  console.log(`Server is Fire at ${hostname}:${port}`);
+// server.listen(Number(port), hostname,() => {
+//   console.log(`Server is Fire at ${hostname}:${port}`);
+// });
+server.listen(port, hostname,() => {
+  console.log(`Server is Fire at ${hostname}`);
 });

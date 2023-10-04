@@ -16,7 +16,7 @@ type WinningRequestType = {
 
 export default function () {
     // TODO: Put url in .env
-    const socket = io('http://localhost:8000')
+    const socket = io('https://backconnect4quentinpayet.azurewebsites.net')
 
     // player color
     socket.on("player color", (req) => {
