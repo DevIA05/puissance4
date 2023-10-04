@@ -1,6 +1,6 @@
 import { boardStateDictType, getInitialBoard } from "./board.utils"
 
-type RoomType = {
+export type RoomType = {
     id: number,
     playerOneSocketId: string | undefined,
     playerTwoSocketId: string | undefined,
