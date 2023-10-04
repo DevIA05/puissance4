@@ -53,4 +53,4 @@ jobs:
           app-name: 'backconnect4quentinpayet'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_08518EA5DC2B4ACA8FFF2C7ABA9AC23C }}
-          package: .
+          package: ./node-app/back/
