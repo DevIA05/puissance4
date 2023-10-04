@@ -1,13 +1,14 @@
-import { Connector4 } from './Connector4';
+import { Connect4 } from './Connect4';
 import { Agent } from './Agent';
 
+debugger
 
-const env = new Connector4();
-const agent = new Agent();
+const env: Connect4 = new Connect4();
+const agent: Agent = new Agent();
 
-const numEpisodes = 10; // Nombre d'épisodes d'entraînement
+const numEpisodes: number = 10; // Number of training episodes
 
-for (let episode = 0; episode < numEpisodes; episode++) {
+for (let episode: number = 0; episode < numEpisodes; episode++) {
   let done = false;
   const states: number[][][] = [];
   const actions: number[] = [];
@@ -24,16 +25,24 @@ for (let episode = 0; episode < numEpisodes; episode++) {
 
       if (env.isGameOver()) {
         done = true;
-        // Calculez la récompense en fonction du résultat du jeu (par exemple, 1 pour une victoire, 0 pour une égalité, -1 pour une défaite)
+        // Calculate the reward based on the game result (e.g. 1 for a win, 0 for a tie, -1 for a loss)
         const reward = env.getReward();
         rewards.push(reward);
       }
     }
   }
 
-  // Mettez à jour l'agent en fonction des expériences de l'épisode
-  agent.learnFromExperience(states, actions, rewards);
+  // @ts-ignore: Keep this console.log statement
+  console.log("===============================================================")
+  console.log(`Episode:  ${episode}`)
+  console.log("===============================================================")
 
-  // Réinitialisez l'environnement pour le prochain épisode
+  // Update the agent based on experiences in the episode
+  agent.learnFromExperience(states, actions, rewards[episode]);
+
+  // Show the game at the end of the episode
+  env.printBoard();
+
+  // Reset the environment for the next episode
   env.reset();
 }

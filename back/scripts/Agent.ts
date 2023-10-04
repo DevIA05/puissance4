@@ -1,48 +1,48 @@
 import * as tf from '@tensorflow/tfjs-node';
-import { createModel } from './model'; 
+import { createModel } from './Model'; 
 import { inspect } from 'util';
 
-export class Agent{
+export class Agent {
   model: tf.LayersModel;
   discountFactor: number;
   numEpochs: number;
   
   constructor() {
-    // Créez un modèle TensorFlow.js pour l'agent
-    // Le modèle doit prendre en entrée l'état du jeu et produire une sortie pour chaque colonne possible
-    // Utilisez une couche de sortie softmax pour estimer les probabilités des coups
-    const inputShape = [6, 7]; // Pour représenter un plateau de jeu de 6x7
-    const outputUnits = 7;    // Pour 7 colonnes (7 actions possibles)
+    // Create a TensorFlow.js model for the agent
+    // The model should take the game state as input and produce output for each possible column
+    // Use a softmax output layer to estimate move probabilities
+    const inputShape = [6, 7]; // To represent a 6x7 game board
+    const outputUnits = 7;    // For 7 columns (7 possible actions)
     this.model = createModel(inputShape, outputUnits);
     this.discountFactor = 0.9;
     this.numEpochs = 100;
   }
   
-  // Méthode pour choisir un coup en fonction de l'état actuel du jeu
+  // Method to choose a move based on the current game state
   chooseMove(state: number[][]): number {
-    // Convertissez l'état du jeu en un tenseur TensorFlow.js
+    // Convert the game state into a TensorFlow.js tensor
     const stateTensor = tf.tensor([state]);
 
-    // Utilisez le modèle pour estimer les probabilités des coups
+    // Use the model to estimate move probabilities
     const probabilities = this.model.predict(stateTensor) as tf.Tensor;
     const probabilitiesArray = Array.from(probabilities.dataSync()) as number[];
 
-    // Choisissez un coup en fonction des probabilités
+    // Choose a move based on the probabilities
     const validMoves: number[] = [];
     for (let col = 0; col < probabilitiesArray.length; col++) {
-    // Vérifiez si la colonne est valide (c'est-à-dire qu'elle n'est pas déjà pleine)
-        if (state[0][col] === 0) {
-            validMoves.push(col);
-        }
+      // Check if the column is valid (i.e., not already full)
+      if (state[0][col] === 0) {
+        validMoves.push(col);
+      }
     }
 
-    // Échantillonnez un coup à partir de la distribution des probabilités
+    // Sample a move from the probability distribution
     const sampledMove = this.sampleMove(probabilitiesArray, validMoves);
 
     return sampledMove;
-}
+  }
   
-  // Méthode pour échantillonner un coup à partir des probabilités
+  // Method to sample a move from the probabilities
   sampleMove(probabilities: number[], validMoves: number[]): number {
     const totalProbability = probabilities.reduce((sum, prob, col) => {
       if (validMoves.includes(col)) {
@@ -63,63 +63,49 @@ export class Agent{
       }
     }
   
-    // Cela ne devrait jamais se produire, mais au cas où, retournez le dernier coup valide
+    // This should never happen, but just in case, return the last valid move
     return validMoves[validMoves.length - 1];
   }
   
-  // Méthode pour apprendre à partir des expériences (apprentissage par renforcement)
+  // Method to learn from experiences (reinforcement learning)
   learnFromExperience(
     states: number[][][],
     actions: number[],
-    rewards: number[],
+    reward: number,
   ) {
-    // Mettez en œuvre l'apprentissage par renforcement avec TensorFlow.js
-    const numExperiences = states.length;
+    const learningRate = 0.1; // Learning rate
+    const targetDiscount = this.discountFactor; // Discount factor for future rewards
 
-    // Préparez les tableaux pour stocker les états d'entrée et les cibles
-    const inputStates: tf.Tensor[] = [];
-    const targets: tf.Tensor[] = [];
-  
-    for (let i = 0; i < numExperiences; i++) {
-      const state = states[i];
-      const action = actions[i];
-      const reward = rewards[i];
-  
-      // Convertissez l'état en tenseur TensorFlow.js
-      const stateTensor = tf.tensor([state]);
-  
-      // Préparez la cible pour l'apprentissage
-      const nextStateTensor = tf.tensor([states[i + 1]]); // L'état suivant
-// ===========================================================================================
-      debugger
-      // @ts-ignore: Keep this console.log statement
-      console.log("===========================================================")
-      console.log('Contenu de nextStateTensor :', inspect(nextStateTensor.arraySync()));
-      console.log("===========================================================")
-// ===========================================================================================
-      const target = reward + this.discountFactor * (this.model.predict(nextStateTensor) as tf.Tensor[])[0].dataSync()[0];  
-      // Obtenez la prédiction du modèle pour l'action choisie
-      const predicted = (this.model.predict(stateTensor) as tf.Tensor[])[0].arraySync() as number[];
+    // Iterate through states and actions in reverse order
+    for (let t = states.length - 1; t >= 0; t--) {
+      const state = tf.tensor(states[t]);
+      const action = actions[t];
 
-      // Calculez l'avantage
-      const advantage = target - predicted[0];
-  
-      // Stockez les états en entrée et les cibles
-      inputStates.push(stateTensor);
-      targets.push(tf.scalar(target));
-  
-      // Libérez la mémoire des tenseurs temporaires
-      stateTensor.dispose();
-      nextStateTensor.dispose();
+      // Calculate the current Q value for the given state and action
+      const currentQ = this.model.predict(state) as tf.Tensor;
+      const currentQArray = Array.from(currentQ.dataSync()) as number[];
+
+      // Calculate the expected reward for the next state
+      let targetQ = reward;
+      
+      // If it's not the last state, add the discounting of future rewards
+      if (t < states.length - 1) {
+        const nextState = tf.tensor(states[t + 1]);
+        const nextStateQ = this.model.predict(nextState) as tf.Tensor;
+        const nextStateQArray = Array.from(nextStateQ.dataSync()) as number[];
+
+        // Choose the maximum Q value for the next state
+        const maxNextQ = Math.max(...nextStateQArray);
+
+        // Calculate the expected reward by adding the discount
+        targetQ += targetDiscount * maxNextQ;
+      }
+
+      // Update the Q value for the chosen action in the current state
+      currentQArray[action] = (1 - learningRate) * currentQArray[action] + learningRate * targetQ;
+
+      // Update the model with the new Q value
+      this.model.fit(state, tf.tensor([currentQArray]));
     }
-  
-    // Entraînez le modèle avec les états en entrée et les cibles
-    const xs = tf.concat(inputStates);
-    const ys = tf.concat(targets);
-    this.model.fit(xs, ys, { epochs: this.numEpochs });
-  
-    // Libérez la mémoire des tenseurs
-    xs.dispose();
-    ys.dispose();
   }
 }
