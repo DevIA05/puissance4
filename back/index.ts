@@ -4,7 +4,7 @@ import { Server } from 'socket.io'
 
 import dotenv from 'dotenv';
 
-import { webSocketConnection } from './utils/webSocketUtils';
+import { webSocketConnection } from './webSocket';
 
 //For env File 
 dotenv.config();
