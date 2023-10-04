@@ -8,6 +8,8 @@ type RoomType = {
 }
 
 // TODO: Utiliser une DB !?
+// TODO: Augmenter le nombre de rooms disponible
+// TODO: Mettre en place cas ou toutes les rooms sont pleines (création de nouvelles rooms)
 let rooms: RoomType[] = [0,1,2].map((id) => {
     return {
         id,

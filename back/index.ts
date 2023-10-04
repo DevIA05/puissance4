@@ -10,6 +10,7 @@ import { GameStepEnum, checkNull, checkWinGlobal } from './winDetection.utils';
 //For env File 
 dotenv.config();
 const port = process.env.PORT;
+const hostname = process.env.HOSTNAME;
 
 const app: Application = express();
 const server = createServer(app)
@@ -84,15 +85,15 @@ io.on('connection', (socket) => {
     io.to(roomId).emit("opponent left")
 
     console.log(playerPiece, "player of room", roomId, "disconnected by itself")
-    console.log("rooms before reset",getRooms())
+    // console.log("rooms before reset",getRooms())
     resetRoom(Number(roomId))
-    console.log("rooms after reset",getRooms())
+    // console.log("rooms after reset",getRooms())
 
   })
   // TODO: Add an listenner to the disconnect event from client 
   // and remove from the room (socket and variable)
 })
 
-server.listen(port, () => {
-  console.log(`Server is Fire at http://localhost:${port}`);
+server.listen(Number(port), hostname,() => {
+  console.log(`Server is Fire at ${hostname}:${port}`);
 });
