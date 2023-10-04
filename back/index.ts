@@ -64,6 +64,7 @@ io.on('connection', (socket) => {
         board: updatedRoom.board,
         winningPieces: totalWinningPieces
       })
+      resetRoom(Number(roomId))
       // TODO: Disconnect socket and reset rooms
       // TODO: Verify if this works properly
     // Draw condition
@@ -74,6 +75,7 @@ io.on('connection', (socket) => {
         result: GameStepEnum.draw,
         board: updatedRoom.board
       })
+      resetRoom(Number(roomId))
       // TODO: Disconnect socket and reset rooms
     } else {
       io.to(roomId).emit('moved', updatedRoom.board)
@@ -82,7 +84,7 @@ io.on('connection', (socket) => {
 
   socket.on("disconnect", () => {
     // Disconnect the other player
-    io.to(roomId).emit("opponent left")
+    io.to(roomId).emit("disconnection order")
 
     console.log(playerPiece, "player of room", roomId, "disconnected by itself")
     // console.log("rooms before reset",getRooms())

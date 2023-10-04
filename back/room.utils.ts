@@ -49,6 +49,7 @@ export function updateRooms(room: RoomType, socketId: string) {
     return player
 }
 
+// TODO: Verify if there is no bug
 export function resetRoom(roomId: number) {
     const oldRooms = rooms.filter((_room) => roomId != _room.id)
     oldRooms.push({
@@ -58,4 +59,5 @@ export function resetRoom(roomId: number) {
         board: getInitialBoard()    
     })
     rooms = oldRooms
+    console.log(`room ${roomId} reseted`);
 }

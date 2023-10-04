@@ -31,7 +31,7 @@ export default function () {
       }}
     )
 
-    socket.on("opponent left", () => {
+    socket.on("disconnection order", () => {
         console.log("opponent left")
         setGameStep(GameStepEnum.opponentLeft)
         socket.disconnect()
@@ -55,6 +55,7 @@ export default function () {
             setWinningPieces(req.winningPieces)
         }
         setGameStep(req.result)
+        socket.disconnect()
     })
 
     onCleanup(()=> {
